@@ -128,11 +128,22 @@
       if (properties.building_id) {
         // Display building-specific information
         infoBox.style.display = 'block';
-        infoBox.innerHTML = '<strong>Building Information:</strong><br>' +
-          properties.propertyNames.map(name => 
-            `<strong>${name}:</strong> ${properties[name].getValue()}<br>`
-          ).join('');
-      } 
+    
+        // Create a list of property information, filtering out null values
+        const propertyInfo = properties.propertyNames
+            .filter(name => properties[name].getValue() !== null) // Filter out null values
+            .map(name => 
+                `<strong>${name}:</strong> ${properties[name].getValue()}<br>`
+            ).join('');
+    
+        // Check if there are any properties to display
+        if (propertyInfo) {
+            infoBox.innerHTML = '<strong>Building Information:</strong><br>' + propertyInfo;
+        } else {
+            infoBox.innerHTML = '<strong>Building Information:</strong><br>No additional information available.';
+        }
+    }
+    
       // Check if the entity is an artwork (has photograph property)
       else if (properties.photograph) {
         const photographPath = properties.photograph.getValue();
