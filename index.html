@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="module" src="main.js" defer></script>
+  <title>Cesium Viewer</title>
+</head>
+<body>
+  <!-- Container for the Cesium viewer -->
+  <div id="cesiumContainer"></div>
+  <div id="search-container">
+    <input type="text" id="searchInput" placeholder="Enter Building Name">
+    
+    <button id="searchButton">Search</button>
+  </div>
+
+  <!-- Dropdown to select user type -->
+  <div class="control-panel">
+    <label for="userType">Select the type of user you are:</label>
+    <select id="userType">
+      <option value="student">Student</option>
+      <option value="prospectiveStudent">Prospective Student</option>
+      <option value="resourceManagement">Resource Management</option>
+      <option value="visitor">Visitor</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+
+  <!-- Info box to display building details -->
+  <div id="infoBox">Click on a building to view details</div>
+</body>
+</html>
+</html>
