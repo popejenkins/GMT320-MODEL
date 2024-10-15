@@ -148,4 +148,9 @@
       // Hide the infoBox if no entity is selected
       infoBox.style.display = 'none';
     }
+
+    // filter features
+    {
+      
+    }
   });
