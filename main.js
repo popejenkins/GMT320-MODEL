@@ -24,7 +24,9 @@
   }).then(dataSource => {
     geoJsonDataSource = dataSource;
     viewer.dataSources.add(dataSource);
-    
+
+
+
     // Set extrusions and zoom to data
     dataSource.entities.values.forEach(entity => {
       if (entity.polygon) {
@@ -100,6 +102,27 @@
       alert('Building not found');
     }
   });
+
+  // Filter buildings by attribute and value
+document.getElementById('filterButton').addEventListener('click', () => {
+  const attribute = document.getElementById('filterAttribute').value;
+  const value = document.getElementById('filterValue').value.toLowerCase();
+
+  // Reset all buildings to original color
+  buildingEntities.forEach(building => {
+    building.entity.polygon.material = Cesium.Color.SANDYBROWN;
+  });
+
+  // Filter buildings
+  buildingEntities.forEach(building => {
+    const propValue = building.entity.properties[attribute]?.getValue()?.toString().toLowerCase();
+    if (propValue === value) {
+      // Highlight filtered buildings in blue
+      building.entity.polygon.material = Cesium.Color.BLUE;
+    }
+  });
+});
+
   
   Cesium.GeoJsonDataSource.load('artwork.geojson')
   .then(function (dataSource) {
@@ -161,7 +184,5 @@
     }
 
     // filter features
-    {
-      
-    }
-  });
+    //start
+});
