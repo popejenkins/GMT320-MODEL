@@ -6,6 +6,17 @@
   .cesium-viewer .cesium-widget-credits {
     display: none;/* this is code to remove credits messgae*/
   }
+  .filtering{
+    position: absolute;
+    top: 11px;
+    left: 440px;
+    width: auto;
+    padding: 10px;
+    background-color: rgba(121, 150, 99, 0.8); /* Semi-transparent background */
+    border-radius: 5px;
+    z-index: 1; /* Ensure it stays on top of Cesium map */
+
+  }
   .control-panel {
     position: absolute;
     top: 11px;
