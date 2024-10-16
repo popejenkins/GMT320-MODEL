@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "atm",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 1, "id": 1, "bank": "FNB", "cctv": true, "security_guard": false, "wheelchair_access": true, "operation_hours": "24/7" }, "geometry": { "type": "Point", "coordinates": [ 28.23156858, -25.75426446 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "id": 2, "bank": "standard bank ", "cctv": true, "security_guard": false, "wheelchair_access": true, "operation_hours": "24/7" }, "geometry": { "type": "Point", "coordinates": [ 28.23154187, -25.75421658 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "id": 3, "bank": "absa", "cctv": true, "security_guard": false, "wheelchair_access": true, "operation_hours": "24/7" }, "geometry": { "type": "Point", "coordinates": [ 28.23152085, -25.75424929 ] } },
+{ "type": "Feature", "properties": { "fid": 4, "id": 4, "bank": "nedbank", "cctv": true, "security_guard": false, "wheelchair_access": true, "operation_hours": "24/7" }, "geometry": { "type": "Point", "coordinates": [ 28.2314533, -25.75410539 ] } }
+]
+}
