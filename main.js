@@ -5,44 +5,52 @@
   // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
   const viewer = new Cesium.Viewer('cesiumContainer', {
     scene3DOnly: true,
-    baseLayerPicker: false,
+    baseLayerPicker: true,
     infoBox: false,  
     HomeButton: false, 
     timeline: true,
     animation: true,
-  });
   
+  });
+ 
   // Enable lighting for better extrusion visibility
   viewer.scene.globe.enableLighting = true;
   //instantiate a variable to store a list of building entities
   let buildingEntities = [];
 
-  // Store GeoJSON data source and building entities
-  Cesium.GeoJsonDataSource.load('artwork.geojson')
-  .then(function (artworkDataSource) {
-    viewer.dataSources.add(artworkDataSource);
-  })
-  .catch(function (error) {
-    console.log("Error loading artwork:", error);
-  });
+
   // Load and add garden
   Cesium.GeoJsonDataSource.load('garden.geojson',{
     stroke: Cesium.Color.LIGHTGREEN,
     fill: Cesium.Color.LIGHTGREEN.withAlpha(1),
     strokeWidth: 2,
-  })
-  .then(function (gardenDataSource) {
+
+  }).then(function (gardenDataSource) {
     viewer.dataSources.add(gardenDataSource);
+
+    var entities = gardenDataSource.entities.values;
+
+    // Iterate through the entities (features) and apply the grass texture
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+
+      // Apply the grass texture to the polygon fill
+      if (entity.polygon) {
+        entity.polygon.material = new Cesium.ImageMaterialProperty({
+          image: 'green-leaf-background.jpg',  // Path to your grass texture
+          repeat: new Cesium.Cartesian2(10, 10)  // Adjust the repeat as necessary
+        });
+      }
+    }
   })
   .catch(function (error) {
     console.log("Error loading garden:", error);
   });
   //load emergency point and add
   Cesium.GeoJsonDataSource.load('emergency point.geojson',{
-    stroke: Cesium.Color.HOTPINK,
-    fill: Cesium.Color.PINK,
-    markerSize: 22,
-    markerColor: Cesium.Color.RED})
+    markerSize: 30,
+    markerColor: Cesium.Color.GREEN,
+    markerSymbol:'hospital'})
   .then(function (emergencyDataSource) {
     viewer.dataSources.add(emergencyDataSource);
   })
@@ -51,20 +59,37 @@
   });
 
 // Load and add Lawns data source
-Cesium.GeoJsonDataSource.load('lawn.geojson',{
-  stroke: Cesium.Color.DARKGREEN,
-  fill: Cesium.Color.DARKGREEN.withAlpha(1),
-  strokeWidth: 2,
+Cesium.GeoJsonDataSource.load('lawn.geojson', {
+  stroke: Cesium.Color.DARKGREEN,  // Retain stroke color if needed
+  strokeWidth: 2  // Stroke width for the edges
 })
   .then(function (lawnDataSource) {
     viewer.dataSources.add(lawnDataSource);
+
+    var entities = lawnDataSource.entities.values;
+
+    // Iterate through the entities (features) and apply the grass texture
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+
+      // Apply the grass texture to the polygon fill
+      if (entity.polygon) {
+        entity.polygon.material = new Cesium.ImageMaterialProperty({
+          image: 'Grass001_1K-JPG_Color.jpg',  // Path to your grass texture
+          repeat: new Cesium.Cartesian2(10, 10)  // Adjust the repeat as necessary
+        });
+      }
+    }
   })
   .catch(function (error) {
     console.log("Error loading lawn:", error);
   });
 
 // Load and add ATMs data source
-Cesium.GeoJsonDataSource.load('atm.geojson')
+Cesium.GeoJsonDataSource.load('atm.geojson',
+  {markerSize: 30,
+  markerColor: Cesium.Color.GREEN,
+  markerSymbol:'bank'})
   .then(function (atmDataSource) {
     viewer.dataSources.add(atmDataSource);
   })
@@ -166,7 +191,10 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
     }
   });
   
-  Cesium.GeoJsonDataSource.load('artwork.geojson')
+  Cesium.GeoJsonDataSource.load('artwork.geojson',
+    {markerSize: 30,
+    markerColor: Cesium.Color.DARKSALMON,
+    markerSymbol:'monument'})
   .then(function (dataSource) {
       viewer.dataSources.add(dataSource);
       
