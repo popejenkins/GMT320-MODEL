@@ -186,11 +186,14 @@ document.getElementById('filterButton').addEventListener('click', () => {
         infoBox.style.display = 'block';
     
         // Create a list of property information, filtering out null values
-        const propertyInfo = properties.propertyNames
-            .filter(name => properties[name].getValue() !== null) // Filter out null values
-            .map(name => 
-                `<strong>${name}:</strong> ${properties[name].getValue()}<br>`
-            ).join('');
+      const propertyInfo = properties.propertyNames
+        .filter(name => {
+        const value = properties[name].getValue()?.toString().trim().toLowerCase();
+        return value !== 'null' && value !== 'null ' && value !== null && value !== undefined;
+      })
+      .map(name => `<strong>${name}:</strong> ${properties[name].getValue()}<br>`)
+      .join('');
+
     
         // Check if there are any properties to display
         if (propertyInfo) {
