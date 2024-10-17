@@ -11,16 +11,32 @@
 </head>
 <body>
   <div id="cesiumContainer"></div>
+  
   <div id="controlPanel">
     <div id="search-container">
       <input type="text" id="searchInput" placeholder="Enter Building Name">
       <button id="searchButton">Search</button>
     </div>
-    <div class="filtering">
-      <input type="text" id="filterAttribute" placeholder="Attribute (e.g., building_id)">
-      <input type="text" id="filterValue" placeholder="Value">
+      <div class="filter-row">
+        <select id="filterAttribute">
+          <option value="">Select Attribute</option>
+          <option value="building_id">Building ID</option>
+          <option value="Type">Type</option>
+          <option value="entrances">Entrances</option>
+          <option value="Lavatory">Lavatory</option>
+          <option value="Elevator">Elevator</option>
+          <option value="levels">Levels</option>
+          <option value="Offices">Offices</option>
+        </select>
+        <select id="filterValue">
+          <option value="">Select Value</option>
+          <!-- Options will be populated dynamically based on selected attribute -->
+        </select>
       <button id="filterButton">Filter</button>
     </div>
+    
+    
+
     <div class="control-panel">
       <label for="userType">Select the type of user you are:</label>
       <select id="userType">

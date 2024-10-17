@@ -14,6 +14,19 @@ body {
   overflow: hidden; /* Prevents scrolling */
 }
 
+#searchInput {
+  background-color: rgb(0, 0, 0);
+  color: #fff;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 15px; /* Rounded corners */
+  width: 60%; /* Full width */
+  max-width: 300px; /* Optional: Set a max width */
+  box-sizing: border-box; /* Ensure padding is included in the width */
+  margin-bottom: 10px; /* Space below the input */
+}
+
+
 #controlPanel {
   position: absolute;
   top: 10px;
@@ -23,7 +36,7 @@ body {
   align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
   border: 1px solid rgb(44, 44, 44);
-  color: rgb(0, 255, 64);
+  color: rgb(255, 255, 255);
   padding: 10px;
   border-radius: 15px;
   z-index: 1; /* Ensure it stays on top of Cesium map */
@@ -47,7 +60,7 @@ b, strong {
   max-height: 200px;
   overflow-y: auto;
   margin-top: 10px; /* Adjust spacing from top */
-  top: 225px;
+  top: 260px;
   left: 10px;
   z-index: 1;
   padding: 15px;
@@ -56,7 +69,7 @@ b, strong {
 
 #imageButtons {
   position: absolute;
-  top: 150px; /* Adjust top position as needed */
+  top: 180px; /* Adjust top position as needed */
   left: 10px; /* Adjust left position as needed */
   display: flex;
   flex-direction: column;
@@ -66,7 +79,7 @@ b, strong {
 
 button {
   background-color: rgba(0, 0, 0, 0.9);
-  color: rgb(0, 255, 64);
+  color: rgb(255, 255, 255);
   border: 1px solid rgb(0, 0, 0);
   padding: 10px;
   margin-bottom: 5px;
@@ -75,7 +88,8 @@ button {
 }
 
 button:hover {
-  background: rgb(0, 0, 0); /* Hover effect */
+  background: rgba(255, 255, 255, 0.9); /* Hover effect */
+  color: rgb(0, 0, 0);
 }
 
 #sculpturesImage img, #campusImage img {
@@ -88,5 +102,47 @@ button:hover {
   border: 2px solid #000000;
   z-index: 1;
 }
+
+.filtering {
+  position: absolute;
+  top: 11px;
+  left: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+  border-radius: 5px;
+  z-index: 1; /* Ensure it stays on top of Cesium map */
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-row {
+  display: flex;
+  gap: 5px; /* Space between dropdowns */
+  margin-bottom: 5px; /* Space below the row */
+}
+
+select {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: rgb(255, 255, 255);
+  border: 1px solid rgb(0, 0, 0);
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+select:focus {
+  outline: none;
+  border-color: rgb(0, 0, 0); /* Change border color on focus */
+}
+
+select option {
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+
+
+
 
 

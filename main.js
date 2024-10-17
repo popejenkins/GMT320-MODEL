@@ -117,7 +117,33 @@
     });
   });
   
-  
+  const attributeDropdown = document.getElementById('filterAttribute');
+const valueDropdown = document.getElementById('filterValue');
+
+attributeDropdown.addEventListener('change', () => {
+  const selectedAttribute = attributeDropdown.value;
+
+  // Clear previous options
+  valueDropdown.innerHTML = '<option value="">Select Value</option>';
+
+  // Collect unique values for the selected attribute
+  const uniqueValues = new Set();
+  buildingEntities.forEach(building => {
+    const value = building.entity.properties[selectedAttribute]?.getValue()?.toString().toLowerCase().trim();
+    if (value && value !== 'null' && value !== 'null ') {
+      uniqueValues.add(value);
+    }
+  });
+
+  // Populate the value dropdown
+  uniqueValues.forEach(value => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    valueDropdown.appendChild(option);
+  });
+});
+
 
 // Filter buildings by attribute and value
 document.getElementById('filterButton').addEventListener('click', () => {
@@ -148,9 +174,7 @@ document.getElementById('filterButton').addEventListener('click', () => {
           building.entity.polygon.material = Cesium.Color.GREEN; // Highlight filtered buildings
           console.log(`Highlighting building: ${building.name}`);
       });
-  } else {
-      alert('No buildings match your filter criteria');
-  }
+  } 
 });
 
 
