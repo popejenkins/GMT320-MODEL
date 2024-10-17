@@ -66,6 +66,7 @@
   
     // Reset the infoBox content
     infoBox.innerHTML = 'Click on a building to view details';
+    
   
     // Check if an entity is selected and if it has properties
     if (Cesium.defined(entity) && Cesium.defined(entity.properties)) {
@@ -103,25 +104,57 @@
     }
   });
 
-  // Filter buildings by attribute and value
+  //campus and sculpture map buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('sculpturesButton').addEventListener('click', () => {
+      const img = document.getElementById('sculpturesImage');
+      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
+    });
+  
+    document.getElementById('campusButton').addEventListener('click', () => {
+      const img = document.getElementById('campusImage');
+      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
+    });
+  });
+  
+  
+
+// Filter buildings by attribute and value
 document.getElementById('filterButton').addEventListener('click', () => {
   const attribute = document.getElementById('filterAttribute').value;
-  const value = document.getElementById('filterValue').value.toLowerCase();
+  const value = document.getElementById('filterValue').value.toLowerCase().trim(); // Trim spaces, there was an error with spaces in the geojson thats why some buildings were not highlighted
+  console.log(`Filtering by: ${attribute} = ${value}`);
 
   // Reset all buildings to original color
   buildingEntities.forEach(building => {
-    building.entity.polygon.material = Cesium.Color.SANDYBROWN;
+      building.entity.polygon.material = Cesium.Color.SANDYBROWN;
   });
 
   // Filter buildings
-  buildingEntities.forEach(building => {
-    const propValue = building.entity.properties[attribute]?.getValue()?.toString().toLowerCase();
-    if (propValue === value) {
-      // Highlight filtered buildings in blue
-      building.entity.polygon.material = Cesium.Color.BLUE;
-    }
+  const matches = buildingEntities.filter(building => {
+      let propValue = building.entity.properties[attribute]?.getValue()?.toString().toLowerCase().trim();
+      console.log(`Checking building: ${building.name}, property value: ${propValue}`);
+
+      if (!propValue && building.entity.properties[attribute]) {
+          propValue = building.entity.properties[attribute].toString().toLowerCase().trim();
+          console.log(`Fallback property value: ${propValue}`);
+      }
+
+      return propValue === value;
   });
+
+  if (matches.length > 0) {
+      matches.forEach(building => {
+          building.entity.polygon.material = Cesium.Color.GREEN; // Highlight filtered buildings
+          console.log(`Highlighting building: ${building.name}`);
+      });
+  } else {
+      alert('No buildings match your filter criteria');
+  }
 });
+
+
+
 
   
   Cesium.GeoJsonDataSource.load('artwork.geojson')
@@ -183,6 +216,5 @@ document.getElementById('filterButton').addEventListener('click', () => {
       infoBox.style.display = 'none';
     }
 
-    // filter features
-    //start
+  
 });
