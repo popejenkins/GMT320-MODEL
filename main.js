@@ -32,9 +32,7 @@ Cesium.IonResource.fromAssetId(2762931).then(resource => {
       });
     }
   });
-}).catch(function (error) {
-  console.log("Error loading buildings:", error);
-});
+})
 
 // Load and add garden
 Cesium.GeoJsonDataSource.load('garden.geojson',{
@@ -44,21 +42,8 @@ Cesium.GeoJsonDataSource.load('garden.geojson',{
 }).then(function (gardenDataSource) {
   viewer.dataSources.add(gardenDataSource);
   // Apply textures to garden polygons as needed
-}).catch(function (error) {
-  console.log("Error loading garden:", error);
-});
+})
 
-      if (entity.polygon) {
-        entity.polygon.material = new Cesium.ImageMaterialProperty({
-          image: 'green-leaf-background.jpg',  // Path to your grass texture
-          repeat: new Cesium.Cartesian2(10, 10)  // Adjust the repeat as necessary
-        });
-      }
-    }
-  })
-  .catch(function (error) {
-    console.log("Error loading garden:", error);
-  });
   //load emergency point and add
   Cesium.GeoJsonDataSource.load('emergency point.geojson',{
     markerSize: 30,
@@ -67,9 +52,7 @@ Cesium.GeoJsonDataSource.load('garden.geojson',{
   .then(function (emergencyDataSource) {
     viewer.dataSources.add(emergencyDataSource);
   })
-  .catch(function (error) {
-    console.log("Error loading emergency point:", error);
-  });
+  
 
 // Load and add Lawns data source
 Cesium.GeoJsonDataSource.load('lawn.geojson', {
@@ -94,9 +77,6 @@ Cesium.GeoJsonDataSource.load('lawn.geojson', {
       }
     }
   })
-  .catch(function (error) {
-    console.log("Error loading lawn:", error);
-  });
 
 // Load and add ATMs data source
 Cesium.GeoJsonDataSource.load('atm.geojson',
@@ -106,9 +86,6 @@ Cesium.GeoJsonDataSource.load('atm.geojson',
   .then(function (atmDataSource) {
     viewer.dataSources.add(atmDataSource);
   })
-  .catch(function (error) {
-    console.log("Error loading ATMs:", error);
-  });
 
 // Load and add Buildings data source, then fly to it
 // Load and add Buildings data source, then fly to it
@@ -155,9 +132,6 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
       console.log("No entities found in the buildings data source.");
     }
   })
-  .catch(function (error) {
-    console.log("Error loading buildings:", error);
-  });
 
   
   
