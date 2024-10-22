@@ -17,24 +17,37 @@
   viewer.scene.globe.enableLighting = true;
   //instantiate a variable to store a list of building entities
   let buildingEntities = [];
+// Load GeoJSON from Cesium Ion asset
+Cesium.IonResource.fromAssetId(2762931).then(resource => {
+  return Cesium.GeoJsonDataSource.load(resource, { clampToGround: false });
+}).then(dataSource => {
+  geoJsonDataSource = dataSource;
+  viewer.dataSources.add(dataSource);
 
+  dataSource.entities.values.forEach(entity => {
+    if (entity.polygon) {
+      entity.polygon.material = new Cesium.ImageMaterialProperty({
+        image: 'green-leaf-background.jpg', 
+        repeat: new Cesium.Cartesian2(10, 10)  
+      });
+    }
+  });
+}).catch(function (error) {
+  console.log("Error loading buildings:", error);
+});
 
-  // Load and add garden
-  Cesium.GeoJsonDataSource.load('garden.geojson',{
-    stroke: Cesium.Color.LIGHTGREEN,
-    fill: Cesium.Color.LIGHTGREEN.withAlpha(1),
-    strokeWidth: 2,
+// Load and add garden
+Cesium.GeoJsonDataSource.load('garden.geojson',{
+  stroke: Cesium.Color.LIGHTGREEN,
+  fill: Cesium.Color.LIGHTGREEN.withAlpha(1),
+  strokeWidth: 2,
+}).then(function (gardenDataSource) {
+  viewer.dataSources.add(gardenDataSource);
+  // Apply textures to garden polygons as needed
+}).catch(function (error) {
+  console.log("Error loading garden:", error);
+});
 
-  }).then(function (gardenDataSource) {
-    viewer.dataSources.add(gardenDataSource);
-
-    var entities = gardenDataSource.entities.values;
-
-    // Iterate through the entities (features) and apply the grass texture
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-
-      // Apply the grass texture to the polygon fill
       if (entity.polygon) {
         entity.polygon.material = new Cesium.ImageMaterialProperty({
           image: 'green-leaf-background.jpg',  // Path to your grass texture
@@ -154,6 +167,7 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
   
     // Reset the infoBox content
     infoBox.innerHTML = 'Click on a building to view details';
+    
   
     // Check if an entity is selected and if it has properties
     if (Cesium.defined(entity) && Cesium.defined(entity.properties)) {
@@ -190,6 +204,83 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
       alert('Building not found');
     }
   });
+
+  //campus and sculpture map buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('sculpturesButton').addEventListener('click', () => {
+      const img = document.getElementById('sculpturesImage');
+      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
+    });
+  
+    document.getElementById('campusButton').addEventListener('click', () => {
+      const img = document.getElementById('campusImage');
+      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
+    });
+  });
+  
+  const attributeDropdown = document.getElementById('filterAttribute');
+const valueDropdown = document.getElementById('filterValue');
+
+attributeDropdown.addEventListener('change', () => {
+  const selectedAttribute = attributeDropdown.value;
+
+  // Clear previous options
+  valueDropdown.innerHTML = '<option value="">Select Value</option>';
+
+  // Collect unique values for the selected attribute
+  const uniqueValues = new Set();
+  buildingEntities.forEach(building => {
+    const value = building.entity.properties[selectedAttribute]?.getValue()?.toString().toLowerCase().trim();
+    if (value && value !== 'null' && value !== 'null ') {
+      uniqueValues.add(value);
+    }
+  });
+
+  // Populate the value dropdown
+  uniqueValues.forEach(value => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    valueDropdown.appendChild(option);
+  });
+});
+
+
+// Filter buildings by attribute and value
+document.getElementById('filterButton').addEventListener('click', () => {
+  const attribute = document.getElementById('filterAttribute').value;
+  const value = document.getElementById('filterValue').value.toLowerCase().trim(); // Trim spaces, there was an error with spaces in the geojson thats why some buildings were not highlighted
+  console.log(`Filtering by: ${attribute} = ${value}`);
+
+  // Reset all buildings to original color
+  buildingEntities.forEach(building => {
+      building.entity.polygon.material = Cesium.Color.SANDYBROWN;
+  });
+
+  // Filter buildings
+  const matches = buildingEntities.filter(building => {
+      let propValue = building.entity.properties[attribute]?.getValue()?.toString().toLowerCase().trim();
+      console.log(`Checking building: ${building.name}, property value: ${propValue}`);
+
+      if (!propValue && building.entity.properties[attribute]) {
+          propValue = building.entity.properties[attribute].toString().toLowerCase().trim();
+          console.log(`Fallback property value: ${propValue}`);
+      }
+
+      return propValue === value;
+  });
+
+  if (matches.length > 0) {
+      matches.forEach(building => {
+          building.entity.polygon.material = Cesium.Color.GREEN; // Highlight filtered buildings
+          console.log(`Highlighting building: ${building.name}`);
+      });
+  } 
+});
+
+
+
+
   
   Cesium.GeoJsonDataSource.load('artwork.geojson',
     {markerSize: 30,
@@ -223,11 +314,14 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
         infoBox.style.display = 'block';
     
         // Create a list of property information, filtering out null values
-        const propertyInfo = properties.propertyNames
-            .filter(name => properties[name].getValue() !== null) // Filter out null values
-            .map(name => 
-                `<strong>${name}:</strong> ${properties[name].getValue()}<br>`
-            ).join('');
+      const propertyInfo = properties.propertyNames
+        .filter(name => {
+        const value = properties[name].getValue()?.toString().trim().toLowerCase();
+        return value !== 'null' && value !== 'null ' && value !== null && value !== undefined;
+      })
+      .map(name => `<strong>${name}:</strong> ${properties[name].getValue()}<br>`)
+      .join('');
+
     
         // Check if there are any properties to display
         if (propertyInfo) {
@@ -252,4 +346,6 @@ Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
       // Hide the infoBox if no entity is selected
       infoBox.style.display = 'none';
     }
-  });
+
+  
+});
