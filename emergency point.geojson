@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"name": "emergency point",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 1, "id": 1 }, "geometry": { "type": "Point", "coordinates": [ 28.23206688, -25.75309149 ] } },
+{ "type": "Feature", "properties": { "fid": 2, "id": 2 }, "geometry": { "type": "Point", "coordinates": [ 28.23177711, -25.7518894 ] } },
+{ "type": "Feature", "properties": { "fid": 3, "id": 3 }, "geometry": { "type": "Point", "coordinates": [ 28.2317963, -25.75359614 ] } },
+{ "type": "Feature", "properties": { "fid": 4, "id": 4 }, "geometry": { "type": "Point", "coordinates": [ 28.230883629968528, -25.755149881691679 ] } },
+{ "type": "Feature", "properties": { "fid": 5, "id": 5 }, "geometry": { "type": "Point", "coordinates": [ 28.229195496717061, -25.755086384761434 ] } },
+{ "type": "Feature", "properties": { "fid": 6, "id": 6 }, "geometry": { "type": "Point", "coordinates": [ 28.229072930458901, -25.755847510613606 ] } },
+{ "type": "Feature", "properties": { "fid": 7, "id": 7 }, "geometry": { "type": "Point", "coordinates": [ 28.22723148, -25.75507293 ] } },
+{ "type": "Feature", "properties": { "fid": 8, "id": 8 }, "geometry": { "type": "Point", "coordinates": [ 28.22975919, -25.75567195 ] } },
+{ "type": "Feature", "properties": { "fid": 9, "id": 9 }, "geometry": { "type": "Point", "coordinates": [ 28.22972789, -25.75602701 ] } },
+{ "type": "Feature", "properties": { "fid": 10, "id": 10 }, "geometry": { "type": "Point", "coordinates": [ 28.230330721983339, -25.755966815086616 ] } },
+{ "type": "Feature", "properties": { "fid": 11, "id": 11 }, "geometry": { "type": "Point", "coordinates": [ 28.231972401269697, -25.755356492545143 ] } },
+{ "type": "Feature", "properties": { "fid": 12, "id": 12 }, "geometry": { "type": "Point", "coordinates": [ 28.233411809250768, -25.756842394076347 ] } },
+{ "type": "Feature", "properties": { "fid": 13, "id": 13 }, "geometry": { "type": "Point", "coordinates": [ 28.228919453764913, -25.753538494079219 ] } },
+{ "type": "Feature", "properties": { "fid": 14, "id": 14 }, "geometry": { "type": "Point", "coordinates": [ 28.22908071, -25.75327253 ] } },
+{ "type": "Feature", "properties": { "fid": 15, "id": 15 }, "geometry": { "type": "Point", "coordinates": [ 28.234055144738896, -25.755815987186093 ] } }
+]
+}
