@@ -47,7 +47,7 @@ Cesium.GeoJsonDataSource.load('garden.geojson',{
 Cesium.GeoJsonDataSource.load('Road.geojson',{
   stroke: Cesium.Color.BLACK,
   fill: Cesium.Color.BLACK.withAlpha(1),
-  strokeWidth: 8,
+  strokeWidth: 4,
 }).then(function (RoadDataSource) {
   viewer.dataSources.add(RoadDataSource);
 })
