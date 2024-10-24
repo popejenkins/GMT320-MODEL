@@ -56,8 +56,8 @@ b, strong {
   background-color: rgba(0, 0, 0, 0.9);
   color: #FFFFFF;
   border: 1px solid rgb(44, 44, 44);
-  width: 250px;
-  max-height: 200px;
+  width: 300px;
+  max-height: 350px;
   overflow-y: auto;
   margin-top: 10px; /* Adjust spacing from top */
   top: 260px;

@@ -43,6 +43,22 @@ Cesium.GeoJsonDataSource.load('garden.geojson',{
   viewer.dataSources.add(gardenDataSource);
   // Apply textures to garden polygons as needed
 })
+//loading road
+Cesium.GeoJsonDataSource.load('Road.geojson',{
+  stroke: Cesium.Color.BLACK,
+  fill: Cesium.Color.BLACK.withAlpha(1),
+  strokeWidth: 8,
+}).then(function (RoadDataSource) {
+  viewer.dataSources.add(RoadDataSource);
+})
+//restaurants loading
+Cesium.GeoJsonDataSource.load('Restaurant.geojson',{
+  markerSize: 30,
+  markerColor: Cesium.Color.PURPLE,
+  markerSymbol:'restaurant'})
+.then(function (restaurantDataSource) {
+  viewer.dataSources.add(restaurantDataSource);
+})
 
   //load emergency point and add
   Cesium.GeoJsonDataSource.load('emergency point.geojson',{
