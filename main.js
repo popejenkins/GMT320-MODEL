@@ -15,24 +15,10 @@
  
   // Enable lighting for better extrusion visibility
   viewer.scene.globe.enableLighting = true;
-  //instantiate a variable to store a list of building entities
+  //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
-// Load GeoJSON from Cesium Ion asset
-Cesium.IonResource.fromAssetId(2762931).then(resource => {
-  return Cesium.GeoJsonDataSource.load(resource, { clampToGround: false });
-}).then(dataSource => {
-  geoJsonDataSource = dataSource;
-  viewer.dataSources.add(dataSource);
-
-  dataSource.entities.values.forEach(entity => {
-    if (entity.polygon) {
-      entity.polygon.material = new Cesium.ImageMaterialProperty({
-        image: 'green-leaf-background.jpg', 
-        repeat: new Cesium.Cartesian2(10, 10)  
-      });
-    }
-  });
-})
+//INSTANTIATE A GLOBAL VAR
+let emergencyDataSource; 
 
 // Load and add garden
 Cesium.GeoJsonDataSource.load('garden.geojson',{
@@ -42,6 +28,20 @@ Cesium.GeoJsonDataSource.load('garden.geojson',{
 }).then(function (gardenDataSource) {
   viewer.dataSources.add(gardenDataSource);
   // Apply textures to garden polygons as needed
+  var entities = gardenDataSource.entities.values;
+
+  // Iterate through the entities (features) and apply the grass texture
+  for (var i = 0; i < entities.length; i++) {
+    var entity = entities[i];
+
+    // Apply the grass texture to the polygon fill
+    if (entity.polygon) {
+      entity.polygon.material = new Cesium.ImageMaterialProperty({
+        image: 'green-leaf-background.jpg',  // Path to your grass texture
+        repeat: new Cesium.Cartesian2(10, 10)  // Adjust the repeat as necessary
+      });
+    }
+  }
 })
 //loading road
 Cesium.GeoJsonDataSource.load('Road.geojson',{
@@ -105,7 +105,7 @@ Cesium.GeoJsonDataSource.load('atm.geojson',
 
 // Load and add Buildings data source, then fly to it
 // Load and add Buildings data source, then fly to it
-Cesium.GeoJsonDataSource.load('building.geojson', { clampToGround: false })
+Cesium.GeoJsonDataSource.load('Building.geojson', { clampToGround: false })
   .then(function (buildingDataSource) {
     viewer.dataSources.add(buildingDataSource);
   
@@ -339,3 +339,101 @@ document.getElementById('filterButton').addEventListener('click', () => {
 
   
 });
+
+// Proximity analysis
+const bufferRadius = 100; // e.g., 100 meters
+let bufferEntities = [];
+
+// Load emergency points data source and add a buffer
+Cesium.GeoJsonDataSource.load('emergency point.geojson', {
+  markerSize: 30,
+  markerColor: Cesium.Color.GREEN,
+  markerSymbol: 'hospital'
+}).then(function (emergencyDataSource) {
+  viewer.dataSources.add(emergencyDataSource);
+
+  emergencyDataSource.entities.values.forEach((emergencyPoint) => {
+    const emergencyPosition = emergencyPoint.position.getValue(Cesium.JulianDate.now());
+
+    // Check if emergencyPosition is defined
+    if (Cesium.defined(emergencyPosition)) {
+      // Create a circular buffer around each emergency point
+      const bufferEntity = viewer.entities.add({
+        position: emergencyPosition,
+        ellipse: {
+          semiMajorAxis: bufferRadius,
+          semiMinorAxis: bufferRadius,
+          material: Cesium.Color.RED.withAlpha(0.3),
+        },
+      });
+
+      bufferEntities.push(bufferEntity);
+
+      // Check buildings for intersection
+      checkBuildingsForIntersection(emergencyPosition);
+    } else {
+      console.warn('Emergency position is undefined.');
+    }
+  });
+}).catch(function (error) {
+  console.error("Failed to load emergency points:", error);
+});
+
+// Function to check buildings for intersection with buffers
+function checkBuildingsForIntersection(emergencyPosition) {
+  // Load buildings data source
+  Cesium.GeoJsonDataSource.load('building.geojson').then(function (buildingsDataSource) {
+    viewer.dataSources.add(buildingsDataSource);
+
+    const emergencyBufferSphere = new Cesium.BoundingSphere(
+      emergencyPosition,
+      bufferRadius // Use the buffer radius as the sphere's radius
+    );
+
+    // Iterate over buildings to check for intersection
+    buildingsDataSource.entities.values.forEach((building) => {
+      // Ensure the building has a polygon
+      if (building.polygon && building.polygon.hierarchy) {
+        const hierarchy = building.polygon.hierarchy.getValue();
+        const buildingPositions = hierarchy.positions; // Get positions of the building polygon
+        
+        // Create a bounding sphere for the building
+        const buildingBoundingSphere = Cesium.BoundingSphere.fromPoints(buildingPositions);
+
+        // Calculate the distance between the centers of the spheres
+        const distance = Cesium.Cartesian3.distance(
+          emergencyBufferSphere.center,
+          buildingBoundingSphere.center
+        );
+
+        // Check for intersection
+        const sumOfRadii = emergencyBufferSphere.radius + buildingBoundingSphere.radius;
+
+        // Initialize intersection status for the building
+        if (!building.intersectionStatus) {
+          building.intersectionStatus = false; // Initialize to false
+        }
+
+        // If there's an intersection, set status to true
+        if (distance <= sumOfRadii) {
+          building.intersectionStatus = true; // Mark as intersecting
+        }
+      } else {
+        console.warn(`No geometry found for building ID ${building.properties ? building.properties.building_id : 'unknown'}`);
+      }
+    });
+
+    // After checking all buildings, apply color based on intersection status
+    buildingsDataSource.entities.values.forEach((building) => {
+      if (building.intersectionStatus) {
+        // Highlight in green if intersecting
+        building.polygon.material = Cesium.Color.GREEN;
+      } else {
+        // Otherwise, keep it red
+        building.polygon.material = Cesium.Color.RED;
+      }
+    });
+  }).catch(function (error) {
+    console.error("Failed to load buildings:", error);
+  });
+}
