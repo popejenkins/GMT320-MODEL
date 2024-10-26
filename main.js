@@ -291,51 +291,74 @@ document.getElementById('filterButton').addEventListener('click', () => {
           }, false);
       }
   });  
-  viewer.selectedEntityChanged.addEventListener(entity => {
-    const infoBox = document.getElementById('infoBox');
+ //// Function to speak text using Web Speech API with a female voice
+//// Function to speak text using Web Speech API
+function speak(text) {
+  const synth = window.speechSynthesis;
   
-    // Check if an entity is selected and if it has properties
-    if (Cesium.defined(entity) && Cesium.defined(entity.properties)) {
-      const properties = entity.properties;
+  // Stop any ongoing speech
+  if (synth.speaking) {
+    synth.cancel();
+  }
   
-      // Check if the entity is a building (has building_id property)
-      if (properties.building_id) {
-        // Display building-specific information
-        infoBox.style.display = 'block';
-    
-        // Create a list of property information, filtering out null values
-      const propertyInfo = properties.propertyNames
-        .filter(name => {
-        const value = properties[name].getValue()?.toString().trim().toLowerCase();
-        return value !== 'null' && value !== 'null ' && value !== null && value !== undefined;
-      })
-      .map(name => `<strong>${name}:</strong> ${properties[name].getValue()}<br>`)
-      .join('');
+  const utterance = new SpeechSynthesisUtterance(text);
+  synth.speak(utterance);
+}
 
-    
-        // Check if there are any properties to display
-        if (propertyInfo) {
-            infoBox.innerHTML = '<strong>Building Information:</strong><br>' + propertyInfo;
-        } else {
-            infoBox.innerHTML = '<strong>Building Information:</strong><br>No additional information available.';
-        }
-    }
-    
-      // Check if the entity is an artwork (has photograph property)
-      else if (properties.photograph) {
-        const photographPath = properties.photograph.getValue();
-        const artworkName = properties.name ? properties.name.getValue() : "Artwork";
-        
-        // Display artwork-specific information
-        infoBox.style.display = 'block';
-        infoBox.innerHTML = '<strong>Artwork Information:</strong><br>' +
-          '<strong>Name:</strong> ' + artworkName + '<br>' +
-          '<img src="' + photographPath + '" alt="Artwork Image" width="300">';
+// Event listener for selectedEntityChanged to trigger voice descriptions
+viewer.selectedEntityChanged.addEventListener(entity => {
+  const infoBox = document.getElementById('infoBox');
+  const synth = window.speechSynthesis;
+
+  // Stop speech if no entity is selected
+  if (!Cesium.defined(entity) || !Cesium.defined(entity.properties)) {
+    synth.cancel(); // Stop any ongoing speech
+    infoBox.style.display = 'none'; // Hide the infoBox
+    return;
+  }
+
+  const properties = entity.properties;
+  let description = ''; // Prepare the description for TTS
+  let otherPropertiesHTML = ''; // Prepare other properties for display in infoBox
+
+  // Check if the entity is a building (has building_id property)
+  if (properties.building_id) {
+    description = properties.description ? properties.description.getValue() : "No description available for this building.";
+    speak(description);  // Speak only the description
+
+    // Gather other property information for display, skipping null values
+    properties.propertyNames.forEach(name => {
+      const value = properties[name].getValue()?.toString().trim();
+      if (value && value.toLowerCase() !== 'null') {
+        otherPropertiesHTML += `<strong>${name}:</strong> ${value}<br>`;
       }
-    } else {
-      // Hide the infoBox if no entity is selected
-      infoBox.style.display = 'none';
-    }
-
+    });
+    
+    // Update the infoBox content
+    infoBox.innerHTML = `<strong>Building Information:</strong><br>${otherPropertiesHTML}`;
+    infoBox.style.display = 'block';
+  }
   
+  // If entity is artwork, include artwork-specific details
+  else if (properties.photograph) {
+    const artworkName = properties.name ? properties.name.getValue() : "Artwork";
+    const photographPath = properties.photograph.getValue();
+
+    description = properties.description ? properties.description.getValue() : "No description available for this artwork.";
+    speak(description);  // Speak only the description
+
+    // Gather other property information for display, skipping null values
+    properties.propertyNames.forEach(name => {
+      const value = properties[name].getValue()?.toString().trim();
+      if (value && value.toLowerCase() !== 'null' && name !== 'photograph') { // Exclude 'photograph' as it's displayed separately
+        otherPropertiesHTML += `<strong>${name}:</strong> ${value}<br>`;
+      }
+    });
+
+    infoBox.innerHTML = `<strong>Artwork Information:</strong><br>
+      <strong>Name:</strong> ${artworkName}<br>
+      ${otherPropertiesHTML}
+      <img src="${photographPath}" alt="Artwork Image" width="300">`;
+    infoBox.style.display = 'block';
+  }
 });
