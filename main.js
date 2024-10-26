@@ -10,15 +10,14 @@
     HomeButton: false, 
     timeline: true,
     animation: true,
-  
+   
   });
  
   // Enable lighting for better extrusion visibility
   viewer.scene.globe.enableLighting = true;
   //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
-//INSTANTIATE A GLOBAL VAR
-let emergencyDataSource; 
+
 
 // Load and add garden
 Cesium.GeoJsonDataSource.load('garden.geojson',{
@@ -341,99 +340,170 @@ document.getElementById('filterButton').addEventListener('click', () => {
 });
 
 // Proximity analysis
+// Proximity analysis
 const bufferRadius = 100; // e.g., 100 meters
 let bufferEntities = [];
+let emergencyDataSource; // Declare a variable to hold the emergency data source
 
-// Load emergency points data source and add a buffer
+// Load emergency points data source
 Cesium.GeoJsonDataSource.load('emergency point.geojson', {
   markerSize: 30,
   markerColor: Cesium.Color.GREEN,
   markerSymbol: 'hospital'
-}).then(function (emergencyDataSource) {
+}).then(function (dataSource) {
+  emergencyDataSource = dataSource; // Store the emergency data source
   viewer.dataSources.add(emergencyDataSource);
+  console.log("Emergency points loaded.");
 
-  emergencyDataSource.entities.values.forEach((emergencyPoint) => {
+  // Create buffers but do not add them to the viewer yet
+  emergencyDataSource.entities.values.forEach((emergencyPoint, index) => {
     const emergencyPosition = emergencyPoint.position.getValue(Cesium.JulianDate.now());
 
-    // Check if emergencyPosition is defined
     if (Cesium.defined(emergencyPosition)) {
+      console.log(`Creating buffer for emergency point ${index} at position:`, emergencyPosition);
+
       // Create a circular buffer around each emergency point
-      const bufferEntity = viewer.entities.add({
+      const bufferEntity = {
         position: emergencyPosition,
         ellipse: {
           semiMajorAxis: bufferRadius,
           semiMinorAxis: bufferRadius,
           material: Cesium.Color.RED.withAlpha(0.3),
         },
-      });
+      };
 
-      bufferEntities.push(bufferEntity);
-
-      // Check buildings for intersection
-      checkBuildingsForIntersection(emergencyPosition);
+      bufferEntities.push(bufferEntity); // Store buffer entity instead of adding it to the viewer
     } else {
-      console.warn('Emergency position is undefined.');
+      console.warn(`Emergency position is undefined for point ${index}.`);
     }
   });
 }).catch(function (error) {
   console.error("Failed to load emergency points:", error);
 });
 
-// Function to check buildings for intersection with buffers
-function checkBuildingsForIntersection(emergencyPosition) {
-  // Load buildings data source
-  Cesium.GeoJsonDataSource.load('building.geojson').then(function (buildingsDataSource) {
-    viewer.dataSources.add(buildingsDataSource);
+// Add event listener for the emergency plan button
+document.getElementById('emergency-plan-btn').addEventListener('click', function() {
+  // Show the buffers when the button is clicked
+  bufferEntities.forEach(bufferEntity => {
+    viewer.entities.add(bufferEntity); // Add each buffer entity to the viewer
+  });
+  
+  // Check buildings for intersection after showing buffers
+  checkBuildingsForIntersection();
+});
 
-    const emergencyBufferSphere = new Cesium.BoundingSphere(
-      emergencyPosition,
-      bufferRadius // Use the buffer radius as the sphere's radius
-    );
+// Function to check buildings for intersection with collective buffers
+function checkBuildingsForIntersection() {
+ // Load buildings data source
+ Cesium.GeoJsonDataSource.load('building.geojson').then(function (buildingsDataSource) {
+  viewer.dataSources.add(buildingsDataSource);
+  viewer.flyTo(buildingsDataSource, {
+    duration: 3 // seconds
+  });
+  
+  console.log("Building data loaded.");
 
-    // Iterate over buildings to check for intersection
+  // Iterate over each building entity and apply extrusions
+  buildingsDataSource.entities.values.forEach(entity => {
+    if (entity.polygon) {
+      const height = entity.properties.height?.getValue() || 0;
+      const buildingId = entity.properties.building_id?.getValue() || null;
+
+      const additionalHeight = (buildingId === 42) ? 50 : 2.5;  // Increase for Humanities, default for others
+      const engheight = (buildingId === 9) ? 30 : 2.5;
+
+      // Apply extrusion and styling
+      Object.assign(entity.polygon, {
+        extrudedHeight: height + additionalHeight + engheight,
+        height: 0,
+        material: Cesium.Color.SANDYBROWN,
+        outline: true,
+        outlineColor: Cesium.Color.BLACK
+      });
+    }
+  });
+
+
+    // Group polygons by building_id
+    const buildingsGrouped = {};
     buildingsDataSource.entities.values.forEach((building) => {
-      // Ensure the building has a polygon
-      if (building.polygon && building.polygon.hierarchy) {
-        const hierarchy = building.polygon.hierarchy.getValue();
-        const buildingPositions = hierarchy.positions; // Get positions of the building polygon
-        
-        // Create a bounding sphere for the building
-        const buildingBoundingSphere = Cesium.BoundingSphere.fromPoints(buildingPositions);
-
-        // Calculate the distance between the centers of the spheres
-        const distance = Cesium.Cartesian3.distance(
-          emergencyBufferSphere.center,
-          buildingBoundingSphere.center
-        );
-
-        // Check for intersection
-        const sumOfRadii = emergencyBufferSphere.radius + buildingBoundingSphere.radius;
-
-        // Initialize intersection status for the building
-        if (!building.intersectionStatus) {
-          building.intersectionStatus = false; // Initialize to false
+      const buildingId = building.properties?.building_id;
+      if (buildingId) {
+        if (!buildingsGrouped[buildingId]) {
+          buildingsGrouped[buildingId] = [];
         }
-
-        // If there's an intersection, set status to true
-        if (distance <= sumOfRadii) {
-          building.intersectionStatus = true; // Mark as intersecting
-        }
+        buildingsGrouped[buildingId].push(building);
       } else {
-        console.warn(`No geometry found for building ID ${building.properties ? building.properties.building_id : 'unknown'}`);
+        console.warn("Building without a building_id found.");
       }
     });
 
-    // After checking all buildings, apply color based on intersection status
-    buildingsDataSource.entities.values.forEach((building) => {
-      if (building.intersectionStatus) {
-        // Highlight in green if intersecting
-        building.polygon.material = Cesium.Color.GREEN;
-      } else {
-        // Otherwise, keep it red
-        building.polygon.material = Cesium.Color.RED;
+    // Check intersection for each group of polygons by building_id
+    for (const buildingId in buildingsGrouped) {
+      const buildingPolygons = buildingsGrouped[buildingId];
+      let isIntersecting = false;
+
+      console.log(`Checking intersections for building ID ${buildingId} with ${buildingPolygons.length} polygons.`);
+
+      // Check each polygon within the building
+      for (let i = 0; i < buildingPolygons.length; i++) {
+        const buildingPolygon = buildingPolygons[i];
+
+        if (buildingPolygon.polygon && buildingPolygon.polygon.hierarchy) {
+          const hierarchy = buildingPolygon.polygon.hierarchy.getValue();
+          const buildingPositions = hierarchy.positions;
+
+          // Check intersection for this polygon with all buffers
+          if (checkIntersectionWithBuffers(buildingPositions)) {
+            isIntersecting = true;
+            break; // If one polygon intersects, mark the entire building as intersecting
+          }
+        } else {
+          console.warn(`No geometry found for polygon in building ID ${buildingId}`);
+        }
       }
-    });
+
+      // Apply color based on intersection status for all polygons in the building
+      buildingPolygons.forEach((polygon) => {
+        polygon.polygon.material = isIntersecting ? Cesium.Color.GREEN : Cesium.Color.RED;
+      });
+
+      console.log(`Building ID ${buildingId} - Final color: ${isIntersecting ? 'Green' : 'Red'}`);
+    }
   }).catch(function (error) {
     console.error("Failed to load buildings:", error);
   });
 }
+
+// Helper function to check if any buffer intersects with building positions
+function checkIntersectionWithBuffers(buildingPositions) {
+  // Create a bounding sphere for the building positions
+  const buildingBoundingSphere = Cesium.BoundingSphere.fromPoints(buildingPositions);
+
+  // Check intersection with each buffer
+  for (let bufferIndex = 0; bufferIndex < bufferEntities.length; bufferIndex++) {
+    const buffer = bufferEntities[bufferIndex];
+    const emergencyBufferSphere = new Cesium.BoundingSphere(
+      buffer.position.getValue(Cesium.JulianDate.now()),
+      bufferRadius
+    );
+
+    const distance = Cesium.Cartesian3.distance(
+      emergencyBufferSphere.center,
+      buildingBoundingSphere.center
+    );
+    const sumOfRadii = emergencyBufferSphere.radius + buildingBoundingSphere.radius;
+
+    console.log(`  Buffer ${bufferIndex} - Distance: ${distance}, Sum of Radii: ${sumOfRadii}`);
+
+    if (distance <= sumOfRadii) {
+      console.log(`  -> Intersection found with buffer ${bufferIndex}.`);
+      return true; // Intersection found, no need to check further
+    }
+  }
+  return false; // No intersections found
+}
+
+//// Add event listener for the emergency plan button
+document.getElementById('emergency-plan-btn').addEventListener('click', checkBuildingsForIntersection);
+
