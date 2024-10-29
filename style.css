@@ -143,32 +143,32 @@ select option {
 
 
 
-/* Style for the button container */
-#button-container {
-  position: absolute; /* Allows positioning relative to the Cesium container */
-  top: 10px; /* Distance from the top */
-  right: 10px; /* Distance from the right */
-  z-index: 1; /* Ensure it stays above Cesium elements */
-  display: flex;
-  justify-content: center; /* Center the button horizontally */
-  align-items: center; /* Center the button vertically */
+#controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Style for the Emergency Plan button */
-#emergency-plan-btn {
-  background-color: rgba(255, 76, 76, 0.9); /* Light red with transparency */
-  color: rgb(255, 255, 255); /* White text */
-  border: 1px solid rgb(0, 0, 0); /* Black border */
-  padding: 10px 20px; /* Padding around text */
-  border-radius: 15px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
-  font-size: 16px; /* Font size */
+#controls input,
+#controls button {
+  margin: 5px 0;
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 16px;
 }
 
-/* Button hover effect */
-#emergency-plan-btn:hover {
-  background-color: rgba(255, 0, 0, 0.9); /* Darker red on hover */
-  color: rgb(255, 255, 255); /* Ensure text remains white */
+#controls button {
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
 }
 
+#controls button:hover {
+  background-color: #0056b3;
+}
