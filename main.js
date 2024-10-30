@@ -124,8 +124,15 @@ function loadBuildings() {
 
       // Ensure that the data source is correctly loaded and has entities
       if (buildingDataSource && buildingDataSource.entities && buildingDataSource.entities.values.length > 0) {
-        viewer.flyTo(buildingDataSource, { duration: 3 });
-
+        viewer.flyTo(buildingDataSource, {
+          duration: 1,
+          offset: new Cesium.HeadingPitchRange(
+              Cesium.Math.toRadians(0),  // Facing the building directly
+              Cesium.Math.toRadians(0), // Slight upward tilt for ground-level view
+              300 // Move back to 30 meters for a wider view
+          )
+      });
+      
         // Iterate over each building entity and apply extrusions
         buildingDataSource.entities.values.forEach(entity => {
           if (entity.polygon) {
