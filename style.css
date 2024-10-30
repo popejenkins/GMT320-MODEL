@@ -15,9 +15,9 @@ body {
 }
 
 #searchInput {
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
   color: #fff;
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #2f4f2f; /* Dark green border */
   padding: 10px;
   border-radius: 15px; /* Rounded corners */
   width: 60%; /* Full width */
@@ -25,7 +25,6 @@ body {
   box-sizing: border-box; /* Ensure padding is included in the width */
   margin-bottom: 10px; /* Space below the input */
 }
-
 
 #controlPanel {
   position: absolute;
@@ -47,11 +46,11 @@ button, select, input {
 }
 
 b, strong {
-  color: rgb(0, 255, 64);
+  color: rgb(0, 255, 64); /* Bright green */
 }
+
 #infoBox {
   display: none;
- 
   position: absolute;
   background-color: rgba(0, 0, 0, 0.9);
   color: #FFFFFF;
@@ -78,9 +77,9 @@ b, strong {
 }
 
 button {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
   color: rgb(255, 255, 255);
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #4caf50; /* Green border */
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -93,7 +92,6 @@ button:hover {
 }
 
 #sculpturesImage img, #campusImage img {
-  
   margin-bottom: 100px;
   width: auto; /* Adjust size as needed */
   height: auto;
@@ -124,7 +122,7 @@ button:hover {
 select {
   background-color: rgba(0, 0, 0, 0.9);
   color: rgb(255, 255, 255);
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #4caf50; /* Green border */
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -133,7 +131,7 @@ select {
 
 select:focus {
   outline: none;
-  border-color: rgb(0, 0, 0); /* Change border color on focus */
+  border-color: #388e3c; /* Dark green on focus */
 }
 
 select option {
@@ -143,32 +141,56 @@ select option {
 
 
 
+
 #controls {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  top: 15%; /* Adjusted to position towards the middle */
+  right: 170px; /* Positioning from the right */
+  transform: translateY(-50%); /* Center vertically */
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 8px; /* Slightly reduced padding */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 200px; /* Decreased width */
+  text-align: center;
 }
 
-#controls input,
-#controls button {
-  margin: 5px 0;
-  padding: 8px;
-  width: 100%;
+#controls h3 {
+  color: #2f4f2f; /* Dark green */
+  font-size: 16px; /* Reduced font size */
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+#controls input {
+  margin: 4px 0; /* Reduced margin */
+  padding: 4px; /* Further reduced padding */
+  width: 95%; /* Slightly reduced width */
   border: 1px solid #ddd;
-  border-radius: 3px;
-  font-size: 16px;
+  border-radius: 4px;
+  font-size: 12px; /* Reduced font size */
+  border-color: #2f4f2f;
 }
 
 #controls button {
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #4caf50; /* Green */
   color: #fff;
+  font-weight: bold;
+  margin: 4px 0; /* Reduced margin between buttons */
+  width: calc(50% - 8px); /* Adjusted width for 2x2 layout */
+}
+
+#controls .button-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to the next line */
+  justify-content: space-between; /* Space out buttons evenly */
 }
 
 #controls button:hover {
-  background-color: #0056b3;
+  background-color: #388e3c; /* Dark green */
+}
+
+#controls button:active {
+  background-color: #2e7d32;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }

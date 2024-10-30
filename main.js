@@ -105,50 +105,68 @@ Cesium.GeoJsonDataSource.load('atm.geojson',
 
 // Load and add Buildings data source, then fly to it
 // Load and add Buildings data source, then fly to it
-Cesium.GeoJsonDataSource.load('Building.geojson', { clampToGround: false })
-  .then(function (buildingDataSource) {
-    viewer.dataSources.add(buildingDataSource);
-  
-    // Populate the buildingEntities array with loaded entities
-    buildingEntities = buildingDataSource.entities.values.map(entity => {
-      return {
-        name: entity.properties.name.getValue(),  // Adjust this to match your property name
-        entity: entity
-      };
+
+
+// Function to load the buildings data source
+function loadBuildings() {
+  Cesium.GeoJsonDataSource.load('Building.geojson', { clampToGround: false })
+    .then(function (dataSource) {
+      buildingDataSource = dataSource;
+      viewer.dataSources.add(buildingDataSource);
+
+      // Populate the buildingEntities array with loaded entities
+      buildingEntities = buildingDataSource.entities.values.map(entity => {
+        return {
+          name: entity.properties.name.getValue(),  // Adjust this to match your property name
+          entity: entity
+        };
+      });
+
+      // Ensure that the data source is correctly loaded and has entities
+      if (buildingDataSource && buildingDataSource.entities && buildingDataSource.entities.values.length > 0) {
+        viewer.flyTo(buildingDataSource, { duration: 3 });
+
+        // Iterate over each building entity and apply extrusions
+        buildingDataSource.entities.values.forEach(entity => {
+          if (entity.polygon) {
+            const height = entity.properties.height?.getValue() || 0;
+            const buildingId = entity.properties.building_id?.getValue() || null;
+
+            const additionalHeight = (buildingId === 42) ? 50 : 2.5;
+            const engheight = (buildingId === 9) ? 30 : 2.5;
+
+            Object.assign(entity.polygon, {
+              extrudedHeight: height + additionalHeight + engheight,
+              height: 0,
+              material: Cesium.Color.SANDYBROWN,
+              outline: true,
+              outlineColor: Cesium.Color.BLACK
+            });
+          }
+        });
+      } else {
+        console.log("No entities found in the buildings data source.");
+      }
     });
-    // Ensure that the data source is correctly loaded and has entities
-    if (buildingDataSource && buildingDataSource.entities && buildingDataSource.entities.values.length > 0) {
-      
-      // Fly to the buildings once they are added
-      viewer.flyTo(buildingDataSource, {
-        duration: 3 // seconds
-      });
-      
+}
 
-      // Iterate over each building entity and apply extrusions
-      buildingDataSource.entities.values.forEach(entity => {
-        if (entity.polygon) {
-          const height = entity.properties.height?.getValue() || 0;
-          const buildingId = entity.properties.building_id?.getValue() || null;
+// Initial load of buildings
+loadBuildings();
 
-          const additionalHeight = (buildingId === 42) ? 50 : 2.5;  // Increase for Humanities, default for others
-          const engheight = (buildingId === 9) ? 30 : 2.5;
+// Clear buildings on click
+document.getElementById('clearBuildingsBtn').addEventListener('click', function () {
+  if (buildingDataSource) {
+    viewer.dataSources.remove(buildingDataSource);
+    buildingDataSource = null;
+  }
+});
 
-          // Apply extrusion and styling
-          Object.assign(entity.polygon, {
-            extrudedHeight: height + additionalHeight + engheight,
-            height: 0,
-            material: Cesium.Color.SANDYBROWN,
-            outline: true,
-            outlineColor: Cesium.Color.BLACK
-          });
-        }
-      });
-    } else {
-      console.log("No entities found in the buildings data source.");
-    }
-  })
-
+// Reset buildings on click
+document.getElementById('resetBuildingsBtn').addEventListener('click', function () {
+  if (!buildingDataSource) {
+    loadBuildings();
+  }
+});
   
   
   // Set up click event listener to display building info
