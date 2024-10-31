@@ -461,7 +461,7 @@ function showAffectedBuildings() {
           height: 0,
           outline: true,
           outlineColor: Cesium.Color.BLACK,
-          material: isAffected ? Cesium.Color.GREEN.withAlpha(0.5) : Cesium.Color.RED.withAlpha(0.5)
+          material: isAffected ? Cesium.Color.GREEN.withAlpha(1) : Cesium.Color.RED.withAlpha(1)
         });
       }
     });
