@@ -31,8 +31,8 @@ body {
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 17%;
-  left: 50%;
+  top: 15%;
+  left:7.12%;
   transform: translate(-50%, -50%);
   background-color: #f1f8f4; /* Light greenish-white background */
   padding: 10px; /* Reduced padding */
@@ -79,12 +79,12 @@ body {
 
 #controlPanel {
   position: absolute;
-  top: 90px;
-  left: 10px;
+  top: 10%;
+  right: 50%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+  background-color: rgba(171, 231, 166, 0.8); /* Semi-transparent background */
   border: 1px solid rgb(44, 44, 44);
   color: rgb(255, 255, 255);
   padding: 10px;
@@ -102,24 +102,25 @@ b, strong {
 
 #infoBox {
   display: none;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #FFFFFF;
-  border: 1px solid rgb(44, 44, 44);
-  width: 300px;
-  max-height: 350px;
-  overflow-y: auto;
-  margin-top: 10px; /* Adjust spacing from top */
-  top: 260px;
-  right: 10px;
-  z-index: 1;
-  padding: 15px;
-  border-radius: 15px;
+position: absolute;
+background-color: rgba(0, 0, 0, 0.9);
+color: #FFFFFF;
+border: 1px solid rgb(44, 44, 44);
+width: 30%; /* Converted width to percentage */
+max-height: 100%; /* Converted max-height to percentage */
+overflow-y: auto;
+margin-top: 2%; /* Adjusted spacing from top in percentage */
+top: 40%; /* Approximate conversion of top position */
+right: 50%; /* Approximate conversion of right position */
+z-index: 1;
+padding: 1.5%; /* Converted padding to percentage */
+border-radius: 10%; /* Converted border-radius to percentage */
+
 }
 
 
 button {
-  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
+  background-color: rgba(4, 103, 74, 0.9); /* Dark background */
   color: rgb(255, 255, 255);
   border: 1px solid #4caf50; /* Green border */
   padding: 10px;
@@ -178,8 +179,8 @@ select option {
 
 #controls {
   position: absolute;
-  top: 15%; /* Adjusted to position towards the middle */
-  right: 170px; /* Positioning from the right */
+  top: 39%;
+  right:22.3%;
   transform: translateY(-50%); /* Center vertically */
   background-color: rgba(255, 255, 255, 0.9);
   padding: 8px; /* Slightly reduced padding */
@@ -232,8 +233,8 @@ select option {
 /* Positioning the control at the top right of the Cesium viewer */
 #routeControls {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 25%;
+  left:0%;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   padding: 10px;
