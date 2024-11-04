@@ -5,11 +5,11 @@
   // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
   const viewer = new Cesium.Viewer('cesiumContainer', {
     scene3DOnly: true,
-    baseLayerPicker: true,
+    baseLayerPicker: false,
     infoBox: false,  
     HomeButton: false, 
-    timeline: true,
-    animation: true,
+    timeline: false,
+    animation: false,
    
   });
  
