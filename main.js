@@ -5,7 +5,7 @@
   // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
   const viewer = new Cesium.Viewer('cesiumContainer', {
     scene3DOnly: true,
-    baseLayerPicker: true,
+    baseLayerPicker: false,
     infoBox: false,  
     HomeButton: false, 
     timeline: false,
@@ -15,11 +15,33 @@
  
   // Enable lighting for better extrusion visibility
   viewer.scene.globe.enableLighting = true;
+  // Show buttons based on user selection
+ document.getElementById('userType').addEventListener('change', function() {
+  const userType = this.value;
+  
+  // Hide all sections initially
+  document.getElementById('controlPanel').style.display = 'none';
+  document.getElementById('infoBox').style.display = 'none';
+  document.getElementById('controls').style.display = 'none';
+  document.getElementById('routeControls').style.display = 'none';
+
+  // Show elements based on user type selection
+  if (userType === 'resourceManagement') {
+    document.getElementById('controlPanel').style.display = 'block';
+    document.getElementById('controls').style.display = 'block';
+    document.getElementById('routeControls').style.display = 'none';
+  } else if (userType === 'student' || userType === 'prospectiveStudent' || userType === 'visitor') {
+    document.getElementById('routeControls').style.display = 'block';
+  }
+  // If "other" is selected or the default, keep everything hidden and refresh
+  else
+  window.location.reload();
+});
   //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
   let buildingDataSource;
 
-
+ 
 // Load and add garden
 Cesium.GeoJsonDataSource.load('garden.geojson',{
   stroke: Cesium.Color.LIGHTGREEN,

@@ -91,6 +91,16 @@ body {
   border-radius: 15px;
   z-index: 1; /* Ensure it stays on top of Cesium map */
 }
+#controlPanel select {
+  width: 200px;              
+  padding: 8px;               
+  border: 2px solid #333;    
+  border-radius: 5px;         
+  background-color: #f9f9f9;  
+  font-size: 13px;            
+  color: #333;               
+  cursor: pointer;            
+}
 
 button, select, input {
   margin-bottom: 10px; /* Adjust spacing between elements */
@@ -101,7 +111,7 @@ b, strong {
 }
 
 #infoBox {
-  display: none;
+display: none;
 position: absolute;
 background-color: rgba(0, 0, 0, 0.9);
 color: #FFFFFF;
@@ -110,7 +120,7 @@ width: 30%; /* Converted width to percentage */
 max-height: 100%; /* Converted max-height to percentage */
 overflow-y: auto;
 margin-top: 2%; /* Adjusted spacing from top in percentage */
-top: 40%; /* Approximate conversion of top position */
+top: 27%; /* Approximate conversion of top position */
 right: 50%; /* Approximate conversion of right position */
 z-index: 1;
 padding: 1.5%; /* Converted padding to percentage */
@@ -120,7 +130,7 @@ border-radius: 10%; /* Converted border-radius to percentage */
 
 
 button {
-  background-color: rgba(4, 103, 74, 0.9); /* Dark background */
+  background-color: rgba(5, 199, 53, 0.9); /* Dark background */
   color: rgb(255, 255, 255);
   border: 1px solid #4caf50; /* Green border */
   padding: 10px;
@@ -130,7 +140,7 @@ button {
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.9); /* Hover effect */
+  background: #388e3c; /* Hover effect */
   color: rgb(0, 0, 0);
 }
 
@@ -278,7 +288,7 @@ select option {
 }
 
 #calculateRoute:hover {
-  background-color: #4CAF50;
+  background-color: #388e3c;
 }
 
 #clearRoute{
@@ -293,7 +303,7 @@ select option {
   text-align: center;
 }
 #clearRoute:hover {
-  background-color: #4CAF50;
+  background-color: #388e3c;
 }
 
 
