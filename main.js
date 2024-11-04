@@ -242,20 +242,9 @@ document.getElementById('resetBuildingsBtn').addEventListener('click', function 
     }
   });
 
-  //campus and sculpture map buttons
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('sculpturesButton').addEventListener('click', () => {
-      const img = document.getElementById('sculpturesImage');
-      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
-    });
+ 
   
-    document.getElementById('campusButton').addEventListener('click', () => {
-      const img = document.getElementById('campusImage');
-      img.style.display = img.style.display === 'none' ? 'block' : 'none'; // Toggle display
-    });
-  });
-  
-  const attributeDropdown = document.getElementById('filterAttribute');
+const attributeDropdown = document.getElementById('filterAttribute');
 const valueDropdown = document.getElementById('filterValue');
 
 attributeDropdown.addEventListener('change', () => {
@@ -338,6 +327,43 @@ document.getElementById('filterButton').addEventListener('click', () => {
           }, false);
       }
   });  
+  function speak(text) {
+    const synth = window.speechSynthesis;
+    
+    // Stop any ongoing speech
+    if (synth.speaking) {
+      synth.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    synth.speak(utterance);
+  }
+  
+  // Event listener for selectedEntityChanged to trigger voice descriptions
+  viewer.selectedEntityChanged.addEventListener(entity => {
+    const infoBox = document.getElementById('infoBox');
+    const synth = window.speechSynthesis;
+  
+    // Stop speech if no entity is selected
+    if (!Cesium.defined(entity) || !Cesium.defined(entity.properties)) {
+      synth.cancel(); // Stop any ongoing speech
+      infoBox.style.display = 'none'; // Hide the infoBox
+      return;
+    }
+  
+    const properties = entity.properties;
+    let description = ''; // Prepare the description for TTS
+    
+  
+    // Check if the entity is a building (has building_id property)
+    if (properties.building_id) {
+      description = properties.description ? properties.description.getValue() : "No description available for this building.";
+      
+      // Call the speak function to read the description aloud
+      speak(description);  
+    }
+  });
+  
   viewer.selectedEntityChanged.addEventListener(entity => {
     const infoBox = document.getElementById('infoBox');
   
