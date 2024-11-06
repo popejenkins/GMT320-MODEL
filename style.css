@@ -189,7 +189,7 @@ select option {
 
 #controls {
   position: absolute;
-  top: 39%;
+  top: 26.6%;
   right:22.3%;
   transform: translateY(-50%); /* Center vertically */
   background-color: rgba(255, 255, 255, 0.9);
