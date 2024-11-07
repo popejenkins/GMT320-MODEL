@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Campus Tour - Cesium Story</title>
+    <style>
+        /* Page background color */
+        body {
+            background-color: #e0f7e9; /* Light green background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Styling for header section */
+        h1, p {
+            margin: 0;
+            padding: 10px 20px;
+        }
+
+        /* Styling for the control panel */
+        .control-panel {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+        }
+
+        /* Styling for buttons */
+        button {
+            background-color: #a8e6a3; /* Light green color */
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Hover effect for buttons */
+        button:hover {
+            background-color: #90d693; /* Slightly darker green for hover */
+        }
+
+        /* Styling for the popup overlay and content */
+        #popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        #popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Footer styling with reduced padding */
+        footer {
+            padding: 10px 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>University of Pretoria Virtual Academic Tour</h1>
+    <p>Explore Hatfield campus with audio narration. Enjoy your journey!</p>
+
+    <!-- Control Panel for Buttons aligned to the left -->
+    <div class="control-panel">
+        <button onclick="showInfo()">Info</button>
+        <button onclick="playAudio()">Play Audio</button>
+        <button onclick="stopAudio()">Stop Audio</button>
+    </div>
+
+    <!-- Background Audio Element -->
+    <audio id="background-audio">
+        <source src="Academic tour recording.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Embed Cesium Story -->
+    <iframe 
+        src="https://ion.cesium.com/stories/viewer/?id=97e33cf6-abec-4f94-8d94-6dc0ed0a4cd4" 
+        width="100%" 
+        height="600" 
+        style="border: none;">
+    </iframe>
+
+    <!-- Popup Overlay -->
+    <div id="popup-overlay" onclick="closeInfo()">
+        <div id="popup-content" onclick="event.stopPropagation()">
+            <h2>How to Use the Tour</h2>
+            <p>Welcome to the University of Pretoria Virtual Academic Tour!</p>
+            <p><strong>Play Audio:</strong> Click the "Play Audio" button to start the narration.</p>
+            <p><strong>Stop Audio:</strong> Click the "Stop Audio" button to pause the narration at any time.</p>
+            <p><strong>Automatic Slideshow:</strong> To automatically explore the tour, click the slideshow icon in the Cesium viewer.</p>
+            <p><strong>Manual Navigation:</strong> Use the "Next" and "Previous" icons in the Cesium viewer to navigate through the tour at your own pace.</p>
+            <button onclick="closeInfo()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Optional Footer with reduced padding and left alignment -->
+    <footer>
+        <p>For more information, visit the <a href="https://www.up.ac.za">University of Pretoria website</a>.</p>
+    </footer>
+
+    <script>
+        function playAudio() {
+            const audio = document.getElementById('background-audio');
+            audio.currentTime = 0; // Reset audio to the beginning
+            audio.play();
+        }
+
+        function stopAudio() {
+            const audio = document.getElementById('background-audio');
+            audio.pause();
+            audio.currentTime = 0; // Reset audio to the beginning
+        }
+
+        // Reset play button functionality once audio ends
+        document.getElementById('background-audio').addEventListener('ended', function() {
+            this.currentTime = 0; // Reset audio time to 0 after finishing
+        });
+
+        // Show the popup overlay with instructions
+        function showInfo() {
+            document.getElementById('popup-overlay').style.display = 'flex';
+        }
+
+        // Close the popup overlay
+        function closeInfo() {
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
