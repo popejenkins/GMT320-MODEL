@@ -384,3 +384,27 @@ header h3 {
 #searchButton:hover {
   background-color: #45a049;
 }
+
+#academtour {
+  position: absolute;
+  top: 70%;         /* Position the button 50% from the top of the screen */
+  left: 0.1%;        /* Position the button 50% from the left of the screen */
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+#academtour:hover {
+  background-color: #45a049; /* Darker green */
+
+}
+

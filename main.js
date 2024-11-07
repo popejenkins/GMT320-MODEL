@@ -24,6 +24,7 @@
   document.getElementById('infoBox').style.display = 'none';
   document.getElementById('controls').style.display = 'none';
   document.getElementById('routeControls').style.display = 'none';
+  document.getElementById('academtour').style.display = 'none';
 
   // Show elements based on user type selection
   if (userType === 'resourceManagement') {
@@ -32,10 +33,16 @@
     document.getElementById('routeControls').style.display = 'none';
   } else if (userType === 'student' || userType === 'prospectiveStudent' || userType === 'visitor') {
     document.getElementById('routeControls').style.display = 'block';
+    document.getElementById('academtour').style.display = 'block';
+
   }
   // If "other" is selected or the default, keep everything hidden and refresh
   else
   window.location.reload();
+});
+
+document.getElementById("academtour").addEventListener("click", function() {
+  window.location.href = "index3.html";  // Redirect to index3.html
 });
   //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
