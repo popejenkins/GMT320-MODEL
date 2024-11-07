@@ -7,16 +7,38 @@
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script type="module" src="main.js" defer></script>
-  <title>GeoAuraTrekSolutions App</title>
+  <title>GAT 3D Web App</title>
+  <link rel="icon" type="image/x-icon" href="GeoAuraTreklogo.jpeg">
+  <style>
+    /* Hide all buttons initially */
+    #controls, #routeControls, #controlPanel, #infoBox {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
-  
-  <div id="controlPanel">
-    <div id="search-container">
-      <input type="text" id="searchInput" placeholder="Enter Building Name">
-      <button id="searchButton">Search</button>
+  <header>
+    <div class="header-content">
+      <img src="GeoAuraTreklogo.jpeg" alt="Company Logo" class="logo">
+      <h3>Exploring the unknown? We'll Map your route</h3>
+      <div id="search-container">
+        <input type="text" id="searchInput" placeholder="Enter Building Name">
+        <button id="searchButton">Search</button>
+      </div>
     </div>
+  </header>
+  <div class="control-panel">
+    <label for="userType">Select the type of user you are:</label>
+    <select id="userType">
+      <option value="student">Student</option>
+      <option value="prospectiveStudent">Prospective Student</option>
+      <option value="resourceManagement">Resource Management</option>
+      <option value="visitor">Visitor</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div id="controlPanel">
       <div class="filter-row">
         <select id="filterAttribute">
           <option value="">Select Attribute</option>
@@ -34,38 +56,30 @@
         </select>
       <button id="filterButton">Filter</button>
     </div>
-    
-    
-
-    <div class="control-panel">
-      <label for="userType">Select the type of user you are:</label>
-      <select id="userType">
-        <option value="student">Student</option>
-        <option value="prospectiveStudent">Prospective Student</option>
-        <option value="resourceManagement">Resource Management</option>
-        <option value="visitor">Visitor</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
   </div>
   
   <div id="infoBox">Click on a building to view details</div>
+  
+<div id="controls">
+  <h3>Perform Proximity Analysis</h3>
+  <input type="number" id="bufferRadiusInput" placeholder="Enter buffer radius (meters)" min="0">
+  <button id="showBuffersButton">Show Buffers</button>
+  <button id="showAffectedBuildingsButton">Show Affected Buildings</button>
+  <button id="clearBuildingsBtn">Analysis mode</button>
+  <button id="resetBuildingsBtn">Normal mode</button>
+</div>
+<div id="routeControls">
+  <label for="startBuilding">Start Building:</label>
+  <select id="startBuilding"></select>
 
-  <div id="imageButtons">
-    <button id="sculpturesButton">Sculpture Map</button>
-    <button id="campusButton">Campus Map</button>
-    <div id="sculpturesImage" style="display: none;">
-      <img src="sculptures.PNG" alt="Sculptures">
-    </div>
-    <div id="campusImage" style="display: none;">
-      <img src="campus.jpg" alt="Campus">
-    </div>
-  </div>
+  <label for="endBuilding">End Building:</label>
+  <select id="endBuilding"></select>
 
-  
-  
-  
+  <button id="calculateRoute">Calculate Route</button>
+  <button id="clearRoute">Clear Route</button>
+</div>
 
 </body>
 </html>
+
 

@@ -15,9 +15,9 @@ body {
 }
 
 #searchInput {
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
   color: #fff;
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #2f4f2f; /* Dark green border */
   padding: 10px;
   border-radius: 15px; /* Rounded corners */
   width: 60%; /* Full width */
@@ -25,21 +25,81 @@ body {
   box-sizing: border-box; /* Ensure padding is included in the width */
   margin-bottom: 10px; /* Space below the input */
 }
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 15%;
+  left:7.12%;
+  transform: translate(-50%, -50%);
+  background-color: #f1f8f4; /* Light greenish-white background */
+  padding: 10px; /* Reduced padding */
+  border: 1px solid #a4d3b3; /* Light green border */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+  width: 200px; /* Increased width */
+  height: auto; /* Let content determine height */
+  text-align: center;
+  color: #2c3e50; /* Dark text color for readability */
+  font-size: 14px; /* Increased font size */
+}
 
+/* Label styling */
+.control-panel label {
+  font-size: 14px; /* Increased font size for label */
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+/* Dropdown (select) styling */
+.control-panel select {
+  padding: 5px; /* Keep padding the same */
+  font-size: 14px; /* Increased font size */
+  color: #2c3e50;
+  background-color: #d6f5dd; /* Light green */
+  border: 1px solid #a4d3b3;
+  border-radius: 4px;
+  width: 100%; /* Keep width at 100% for dropdown */
+  cursor: pointer;
+}
+
+
+
+.control-panel select:focus {
+  outline: none;
+  border-color: #4CAF50; /* Darker green border on focus */
+}
+
+.control-panel option {
+  color: #2c3e50;
+  background-color: #f1f8f4; /* Light greenish background for options */
+}
 
 #controlPanel {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 10%;
+  right: 50%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+  background-color: rgba(171, 231, 166, 0.8); /* Semi-transparent background */
   border: 1px solid rgb(44, 44, 44);
   color: rgb(255, 255, 255);
   padding: 10px;
   border-radius: 15px;
   z-index: 1; /* Ensure it stays on top of Cesium map */
+}
+#controlPanel select {
+  width: 200px;              
+  padding: 8px;               
+  border: 2px solid #333;    
+  border-radius: 5px;         
+  background-color: #f9f9f9;  
+  font-size: 13px;            
+  color: #333;               
+  cursor: pointer;            
 }
 
 button, select, input {
@@ -47,40 +107,32 @@ button, select, input {
 }
 
 b, strong {
-  color: rgb(0, 255, 64);
-}
-#infoBox {
-  display: none;
- 
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #FFFFFF;
-  border: 1px solid rgb(44, 44, 44);
-  width: 300px;
-  max-height: 350px;
-  overflow-y: auto;
-  margin-top: 10px; /* Adjust spacing from top */
-  top: 260px;
-  left: 10px;
-  z-index: 1;
-  padding: 15px;
-  border-radius: 15px;
+  color: rgb(0, 255, 64); /* Bright green */
 }
 
-#imageButtons {
-  position: absolute;
-  top: 180px; /* Adjust top position as needed */
-  left: 10px; /* Adjust left position as needed */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  z-index: 1; /* Ensure it stays on top of Cesium map */
+#infoBox {
+display: none;
+position: absolute;
+background-color: rgba(0, 0, 0, 0.9);
+color: #FFFFFF;
+border: 1px solid rgb(44, 44, 44);
+width: 30%; /* Converted width to percentage */
+max-height: 100%; /* Converted max-height to percentage */
+overflow-y: auto;
+margin-top: 2%; /* Adjusted spacing from top in percentage */
+top: 27%; /* Approximate conversion of top position */
+right: 50%; /* Approximate conversion of right position */
+z-index: 1;
+padding: 1.5%; /* Converted padding to percentage */
+border-radius: 10%; /* Converted border-radius to percentage */
+
 }
+
 
 button {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(5, 199, 53, 0.9); /* Dark background */
   color: rgb(255, 255, 255);
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #4caf50; /* Green border */
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -88,20 +140,11 @@ button {
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.9); /* Hover effect */
+  background: #388e3c; /* Hover effect */
   color: rgb(0, 0, 0);
 }
 
-#sculpturesImage img, #campusImage img {
-  
-  margin-bottom: 100px;
-  width: auto; /* Adjust size as needed */
-  height: auto;
-  max-width: 700px;
-  object-fit: cover;
-  border: 2px solid #000000;
-  z-index: 1;
-}
+
 
 .filtering {
   position: absolute;
@@ -124,7 +167,7 @@ button:hover {
 select {
   background-color: rgba(0, 0, 0, 0.9);
   color: rgb(255, 255, 255);
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid #4caf50; /* Green border */
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -133,7 +176,7 @@ select {
 
 select:focus {
   outline: none;
-  border-color: rgb(0, 0, 0); /* Change border color on focus */
+  border-color: #388e3c; /* Dark green on focus */
 }
 
 select option {
@@ -144,5 +187,200 @@ select option {
 
 
 
+#controls {
+  position: absolute;
+  top: 26.6%;
+  right:22.3%;
+  transform: translateY(-50%); /* Center vertically */
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 8px; /* Slightly reduced padding */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 200px; /* Decreased width */
+  text-align: center;
+}
+
+#controls h3 {
+  color: #2f4f2f; /* Dark green */
+  font-size: 16px; /* Reduced font size */
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+#controls input {
+  margin: 4px 0; /* Reduced margin */
+  padding: 4px; /* Further reduced padding */
+  width: 95%; /* Slightly reduced width */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px; /* Reduced font size */
+  border-color: #2f4f2f;
+}
+
+#controls button {
+  cursor: pointer;
+  background-color: #4caf50; /* Green */
+  color: #fff;
+  font-weight: bold;
+  margin: 4px 0; /* Reduced margin between buttons */
+  width: calc(50% - 8px); /* Adjusted width for 2x2 layout */
+}
+
+#controls .button-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to the next line */
+  justify-content: space-between; /* Space out buttons evenly */
+}
+
+#controls button:hover {
+  background-color: #388e3c; /* Dark green */
+}
+
+#controls button:active {
+  background-color: #2e7d32;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Positioning the control at the top right of the Cesium viewer */
+#routeControls {
+  position: absolute;
+  top: 25%;
+  left:0%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  width: 200px;
+  z-index: 1;
+}
+
+/* Label styling */
+#routeControls label {
+  font-weight: bold;
+  margin-top: 5px;
+  color: #333;
+  display: block;
+}
+
+/* Dropdown styling */
+#routeControls select {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #f7f7f7;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Button styling */
+#calculateRoute {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+#calculateRoute:hover {
+  background-color: #388e3c;
+}
+
+#clearRoute{
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+#clearRoute:hover {
+  background-color: #388e3c;
+}
 
 
+
+
+
+/* Header Bar */
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75%;
+  background-color: #359d41; /* Dark background */
+  color: white;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  z-index: 2; /* Ensure header is above the map */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Logo styling */
+.logo {
+  width: 40px; /* Small size for the logo */
+  height: auto;
+  margin-left: auto;
+}
+
+/* Title styling */
+header h3 {
+  margin: 0;
+  font-size: 24px;
+  flex: 1;
+}
+
+/* Search Container in Header */
+#search-container {
+  background-color: rgb(0, 73, 33);
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+#searchInput {
+  padding: 5px;
+  border: 1px solid #ccc; /* Light gray border for visibility */
+  border-radius: 3px;
+  margin-right: 10px;
+  font-size: 14px;
+  background-color: white; /* White background */
+  color: #333; /* Dark text color */
+}
+
+#searchInput::placeholder {
+  color: #888; /* Slightly lighter color for placeholder text */
+}
+
+#searchButton {
+  padding: 5px 10px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#searchButton:hover {
+  background-color: #45a049;
+}
