@@ -56,6 +56,10 @@
 document.getElementById("academtour").addEventListener("click", function() {
   window.location.href = "index3.html";  // Redirect to index3.html
 });
+
+document.getElementById("Sighttour").addEventListener("click", function() {
+  window.location.href = "indexSight.html";  // Redirect to index3.html
+});
   //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
   let buildingDataSource;
