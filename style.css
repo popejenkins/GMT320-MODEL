@@ -387,7 +387,7 @@ header h3 {
 
 #academtour {
   position: absolute;
-  top: 65%;         /* Position the button 50% from the top of the screen */
+  top: 62%;         /* Position the button 50% from the top of the screen */
   left: 0.1%;        /* Position the button 50% from the left of the screen */
   background-color: #4CAF50; /* Green */
   border: none;
