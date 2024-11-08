@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UP Sightseeing Tour - Cesium Story</title>
+
+    <style> 
+    /* General Body Styling */
+body {
+    background-color: #62d490; /* Slightly different light green */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Heading and Paragraph Styling */
+h1, p {
+    margin: 0;
+    padding: 12px 24px;
+}
+
+/* Control Panel Layout */
+.control-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+}
+
+/* Button Styling */
+button {
+    background-color: #c8d8cf;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.active {
+    background-color: #cbddd3;
+}
+
+/* Hover Effect for Buttons */
+button:hover {
+    background-color: #75c49c;
+}
+
+
+/* Popup Overlay */
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#popup-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 400px;
+    font-family: 'Arial', sans-serif;
+    text-align: left;
+}
+
+footer {
+    padding: 10px 24px;
+    text-align: left;
+    font-size: 14px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>University of Pretoria Virtual Sightseeing Tour</h1>
+    <p>Discover the Historical buildings of the University of Pretoria.</p>
+
+    <!-- Control Panel for Buttons(help and narration button) -->
+    <div class="control-panel">
+        <button id="tour-guide-btn" onclick="showInfo()">Tour Guide</button>
+        <button id="audio-btn" onclick="toggleAudio()">Start Narration</button>
+
+    </div>
+
+    <!-- Audio for narration -->
+    <audio id="background-audio">
+        <source src="SightseeingTour.mpeg" type="audio/mpeg">
+        
+    </audio>
+
+    <!-- Cesium Story -->
+    <iframe 
+        src="https://ion.cesium.com/stories/viewer/?id=f87cfb85-0b9d-4176-8768-f0b848b45633" 
+        width="100%" 
+        height="600" 
+        style="border: none;">
+    </iframe>
+
+    <!-- Popup Overlay for Tour Instructions -->
+    <div id="popup-overlay" onclick="closeInfo()">
+        <div id="popup-content" onclick="event.stopPropagation()">
+            <p>Welcome to the University of Pretoria Virtual Sightseeing Tour!</p>
+            <p><strong>Tour:</strong>To start the tour, click on the presenter icon displayed on the bottom left of the screen. Icon is represented by a computer.</p>
+            <p><strong>To Start Narration:</strong> Click "Start Narration" to hear about each location.</p>
+            <p><strong>To Stop Narration:</strong> Click "Pause Narration".</p>
+            <p><strong>Manual Navigation:</strong> You are welcome to exit presenter view and manually navigate the tour.</p>
+            <p><strong>Navigation Controls:</strong> Use the Cesium viewer's icons to navigate at your own pace.</p>
+            <button onclick="closeInfo()">Got it!</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Explore more at the <a href="https://www.up.ac.za">University of Pretoria website</a>.</p>
+    </footer>
+
+
+    <script>
+        // Toggle Audio Playback
+function toggleAudio() {
+    const audio = document.getElementById('background-audio');
+    const audioBtn = document.getElementById('audio-btn');
+
+    if (audio.paused) {
+        audio.play();
+        audioBtn.textContent = "Pause Narration";
+        audioBtn.classList.add("active");
+    } else {
+        audio.pause();
+        audioBtn.textContent = "Start Narration";
+        audioBtn.classList.remove("active");
+    }
+}
+
+// Show the Tour Guide Popup
+function showInfo() {
+    document.getElementById('popup-overlay').style.display = 'flex';
+}
+
+// Close the Tour Guide Popup
+function closeInfo() {
+    document.getElementById('popup-overlay').style.display = 'none';
+}
+
+// Navigate to Selected Tour Points
+function goToPoint() {
+    const selectedPoint = document.getElementById('tour-points').value;
+
+    if (selectedPoint) {
+        alert(`Navigating to: ${selectedPoint}`);
+        // Code to navigate to the selected point in Cesium can be added here
+    }
+}
+
+// Reset the audio button state once narration ends
+document.getElementById('background-audio').addEventListener('ended', function() {
+    const audioBtn = document.getElementById('audio-btn');
+    audioBtn.textContent = "Start Narration";
+    audioBtn.classList.remove("active");
+});
+
+    </script>
+</body>
+</html>

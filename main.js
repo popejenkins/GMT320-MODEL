@@ -25,15 +25,27 @@
   document.getElementById('controls').style.display = 'none';
   document.getElementById('routeControls').style.display = 'none';
   document.getElementById('academtour').style.display = 'none';
+  document.getElementById('Sighttour').style.display = 'none';
 
   // Show elements based on user type selection
   if (userType === 'resourceManagement') {
     document.getElementById('controlPanel').style.display = 'block';
     document.getElementById('controls').style.display = 'block';
     document.getElementById('routeControls').style.display = 'none';
-  } else if (userType === 'student' || userType === 'prospectiveStudent' || userType === 'visitor') {
+  } else if (userType === 'student') {
     document.getElementById('routeControls').style.display = 'block';
     document.getElementById('academtour').style.display = 'block';
+
+  }
+  else if ( userType === 'visitor') {
+    document.getElementById('routeControls').style.display = 'block';
+    document.getElementById('Sighttour').style.display = 'block';
+
+  }
+  else if (userType === 'prospectiveStudent') {
+    document.getElementById('routeControls').style.display = 'block';
+    document.getElementById('academtour').style.display = 'block'
+    document.getElementById('Sighttour').style.display = 'block';
 
   }
   // If "other" is selected or the default, keep everything hidden and refresh
@@ -43,6 +55,10 @@
 
 document.getElementById("academtour").addEventListener("click", function() {
   window.location.href = "index3.html";  // Redirect to index3.html
+});
+
+document.getElementById("Sighttour").addEventListener("click", function() {
+  window.location.href = "indexSight.html";  // Redirect to index3.html
 });
   //instantiate a GLOBAL variable to store a list of building entities
   let buildingEntities = [];
