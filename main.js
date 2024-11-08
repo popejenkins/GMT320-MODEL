@@ -5,7 +5,7 @@
   // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
   const viewer = new Cesium.Viewer('cesiumContainer', {
     scene3DOnly: true,
-    baseLayerPicker: false,
+    baseLayerPicker: true,
     infoBox: false,  
     HomeButton: false, 
     timeline: false,
@@ -567,115 +567,55 @@ showBuffersButton.addEventListener('click', showBuffers);
 showAffectedBuildingsButton.addEventListener('click', showAffectedBuildings);
 
 // Get reference to UI elements
-// Reference to dropdown and button
+// Get reference to UI elements
 const startSelect = document.getElementById("startBuilding");
 const endSelect = document.getElementById("endBuilding");
-const calculateRouteButton = document.getElementById("calculateRoute");
+const calculateHighlightButton = document.getElementById("calculateHighlight");
+const clearHighlightButton = document.getElementById("clearHighlight");
 
+let startHighlight;
+let endHighlight;
 
 // Populate start and end dropdowns with unique building names
 function populateBuildingDropdowns() {
-  console.log("Populating building dropdowns...");
-  const addedBuildings = new Set(); // To track added building names
+    console.log("Populating building dropdowns...");
+    const addedBuildings = new Set();
 
-  buildingEntities.forEach(({ name }) => {
-      // Check if the building name has already been added
-      if (!addedBuildings.has(name)) {
-          console.log("Adding building to dropdown:", name);
+    buildingEntities.forEach(({ name }) => {
+        if (!addedBuildings.has(name)) {
+            console.log("Adding building to dropdown:", name);
 
-          // Add to dropdown for start
-          const optionStart = document.createElement('option');
-          optionStart.value = name;
-          optionStart.text = name;
-          startSelect.add(optionStart);
+            // Add to dropdown for start
+            const optionStart = document.createElement('option');
+            optionStart.value = name;
+            optionStart.text = name;
+            startSelect.add(optionStart);
 
-          // Add to dropdown for end
-          const optionEnd = document.createElement('option');
-          optionEnd.value = name;
-          optionEnd.text = name;
-          endSelect.add(optionEnd);
+            // Add to dropdown for end
+            const optionEnd = document.createElement('option');
+            optionEnd.value = name;
+            optionEnd.text = name;
+            endSelect.add(optionEnd);
 
-          // Mark the building name as added
-          addedBuildings.add(name);
-      } else {
-          console.log("Building already added, skipping:", name);
-      }
-  });
-}
-
-
-// Function to get coordinates for a selected building
-// Function to get coordinates for a selected building
-function getBuildingCoordinates(buildingName) {
-  console.log("Getting coordinates for building:", buildingName);
-  const building = buildingEntities.find(b => b.name === buildingName);
-  
-  if (building) {
-      const { entity } = building;
-
-      // Check if the entity's polygon is defined
-      if (entity && entity.polygon) {
-          // Calculate the centroid from the polygon's hierarchy
-          const positions = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now()).positions;
-          const cartesianArray = positions.map(position => {
-              const cartographic = Cesium.Cartographic.fromCartesian(position);
-              return {
-                  longitude: cartographic.longitude,
-                  latitude: cartographic.latitude,
-                  height: cartographic.height
-              };
-          });
-
-          // Calculate the centroid
-          const centroid = calculateCentroid(cartesianArray);
-          console.log("Calculated centroid position:", centroid);
-          return centroid;
-      } else {
-          console.log("Entity or polygon is undefined for building:", buildingName);
-      }
-  }
-  console.log("Building not found:", buildingName);
-  return null;
-}
-
-// Function to calculate the centroid from an array of coordinates
-function calculateCentroid(coords) {
-  const numCoords = coords.length;
-  const longitudeSum = coords.reduce((sum, coord) => sum + coord.longitude, 0);
-  const latitudeSum = coords.reduce((sum, coord) => sum + coord.latitude, 0);
-  const heightSum = coords.reduce((sum, coord) => sum + coord.height, 0);
-
-  return {
-      longitude: longitudeSum / numCoords,
-      latitude: latitudeSum / numCoords,
-      height: heightSum / numCoords // Adjust based on your needs
-  };
-}
-
-// Draw a line between the start and end points
-function drawRoute(startCoordinates, endCoordinates) {
-    console.log("Drawing route from", startCoordinates, "to", endCoordinates);
-    const positions = [
-        Cesium.Cartesian3.fromRadians(startCoordinates.longitude, startCoordinates.latitude, startCoordinates.height),
-        Cesium.Cartesian3.fromRadians(endCoordinates.longitude, endCoordinates.latitude, endCoordinates.height)
-    ];
-
-    // Add a polyline entity to represent the route
-    viewer.entities.add({
-        polyline: {
-            positions: positions,
-            width: 5,
-            material: Cesium.Color.RED
+            addedBuildings.add(name);
+        } else {
+            console.log("Building already added, skipping:", name);
         }
     });
-
-    // Fly to the route for a better view
-    console.log("Flying to the route...");
-    viewer.flyTo(viewer.entities, { duration: 2 });
 }
 
-// Event listener for route calculation
-calculateRouteButton.addEventListener('click', () => {
+// Function to highlight a building
+function highlightBuilding(buildingName, color) {
+    const building = buildingEntities.find(b => b.name === buildingName);
+    if (building && building.entity && building.entity.polygon) {
+        building.entity.polygon.material = color;
+        return building.entity;
+    }
+    return null;
+}
+
+// Event listener for highlight calculation
+calculateHighlightButton.addEventListener('click', () => {
     const startBuilding = startSelect.value;
     const endBuilding = endSelect.value;
 
@@ -683,53 +623,23 @@ calculateRouteButton.addEventListener('click', () => {
     console.log("End building selected:", endBuilding);
 
     if (startBuilding && endBuilding) {
-        const startCoordinates = getBuildingCoordinates(startBuilding);
-        const endCoordinates = getBuildingCoordinates(endBuilding);
+        // Clear any existing highlights
+        clearHighlights();
 
-        if (startCoordinates && endCoordinates) {
-            drawRoute(startCoordinates, endCoordinates);
-        } else {
-            alert('Could not find coordinates for the selected buildings.');
-        }
+        // Highlight the selected buildings
+        startHighlight = highlightBuilding(startBuilding, Cesium.Color.YELLOW.withAlpha(1));
+        endHighlight = highlightBuilding(endBuilding, Cesium.Color.GREEN.withAlpha(1));
     } else {
         alert('Please select both a start and end building.');
     }
 });
 
-// Function to clear the drawn route
-function clearRoute() {
-  // Remove all polylines (routes) from the viewer
-  const entitiesToRemove = viewer.entities.values.filter(entity => entity.polyline);
-  entitiesToRemove.forEach(entity => {
-      viewer.entities.remove(entity);
-  });
-  console.log("Cleared all routes from the viewer.");
+// Function to clear only the highlights
+function clearHighlights() {
+    if (startHighlight) startHighlight.polygon.material = Cesium.Color.SANDYBROWN;
+    if (endHighlight) endHighlight.polygon.material = Cesium.Color.SANDYBROWN;
+    console.log("Cleared building highlights.");
 }
 
-// Event listener for the clear route button
-const clearRouteButton = document.getElementById("clearRoute");
-clearRouteButton.addEventListener('click', clearRoute);
-
-// Event listener for route calculation
-calculateRouteButton.addEventListener('click', () => {
-  const startBuilding = startSelect.value;
-  const endBuilding = endSelect.value;
-
-  console.log("Start building selected:", startBuilding);
-  console.log("End building selected:", endBuilding);
-
-  if (startBuilding && endBuilding) {
-      const startCoordinates = getBuildingCoordinates(startBuilding);
-      const endCoordinates = getBuildingCoordinates(endBuilding);
-
-      if (startCoordinates && endCoordinates) {
-          drawRoute(startCoordinates, endCoordinates);
-      } else {
-          alert('Could not find coordinates for the selected buildings.');
-      }
-  } else {
-      alert('Please select both a start and end building.');
-  }
-});
-
-
+// Event listener for the clear highlights button
+clearHighlightButton.addEventListener('click', clearHighlights);

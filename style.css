@@ -275,7 +275,7 @@ select option {
 }
 
 /* Button styling */
-#calculateRoute {
+#calculateHighlight {
   background-color: #4CAF50;
   color: #fff;
   padding: 10px;
@@ -287,11 +287,11 @@ select option {
   text-align: center;
 }
 
-#calculateRoute:hover {
+#calculateHighlight:hover {
   background-color: #388e3c;
 }
 
-#clearRoute{
+#clearHighlight{
   background-color: #4CAF50;
   color: #fff;
   padding: 10px;
@@ -302,7 +302,7 @@ select option {
   width: 100%;
   text-align: center;
 }
-#clearRoute:hover {
+#clearHighlight:hover {
   background-color: #388e3c;
 }
 

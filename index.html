@@ -31,11 +31,11 @@
   <div class="control-panel">
     <label for="userType">Select the type of user you are:</label>
     <select id="userType">
-      <option value="student">Student</option>
+      <option value="other">Other</option>
       <option value="prospectiveStudent">Prospective Student</option>
       <option value="resourceManagement">Resource Management</option>
       <option value="visitor">Visitor</option>
-      <option value="other">Other</option>
+      <option value="student">Student</option>
     </select>
   </div>
   <div id="controlPanel">
@@ -69,14 +69,14 @@
   <button id="resetBuildingsBtn">Normal mode</button>
 </div>
 <div id="routeControls">
-  <label for="startBuilding">Start Building:</label>
+  <label for="startBuilding">Current Location(yellow):</label>
   <select id="startBuilding"></select>
 
-  <label for="endBuilding">End Building:</label>
+  <label for="endBuilding">Destination(green):</label>
   <select id="endBuilding"></select>
 
-  <button id="calculateRoute">Calculate Route</button>
-  <button id="clearRoute">Clear Route</button>
+  <button id="calculateHighlight">Orient</button>
+  <button id="clearHighlight">Clear</button>
 
  </div>
  <button id="academtour">academic tour</button>
